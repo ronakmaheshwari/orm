@@ -1,0 +1,9 @@
+model User {
+  id Int @id
+  name String
+  email String
+  password String
+  age Int
+  createdAt DateTime
+  isDeleted Boolean
+} 
