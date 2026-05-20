@@ -1,9 +1,9 @@
 model User {
-  id Int @id
-  name String
+  id Int @id @default(autoincrement())
+  name String @default("John")
+  age Int @default(18)
   email String
   password String
-  age Int
   createdAt DateTime
   isDeleted Boolean
-} 
+}

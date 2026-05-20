@@ -18,7 +18,11 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "dependencies": {
+    "@repo/types": "*"
+  },
   "devDependencies": {
+    "@repo/types": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22.19.19",
     "ts-node": "^10.9.2",
