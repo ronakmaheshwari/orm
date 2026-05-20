@@ -14,7 +14,6 @@ export class Lexer {
 
         while(this.position < this.input.length){
             const char = this.currentChar();
-            console.log("This is the character:", char);
 
             if(/\s/.test(char)) {
                 this.position++;
@@ -66,6 +65,15 @@ export class Lexer {
                 continue;
             }
 
+            if(char === ")") {
+                tokens.push({
+                    type: TokenType.RPAREN,
+                    value: ")"
+                })
+                this.position++;
+                continue;
+            }
+
             if(char === "?") {
                 tokens.push({
                     type: TokenType.OPTIONAL,
@@ -87,7 +95,7 @@ export class Lexer {
             if(char === ","){
                 tokens.push({
                     type: TokenType.COMMA,
-                    value: "@"
+                    value: ","
                 })
                 this.position++;
                 continue;
@@ -95,7 +103,7 @@ export class Lexer {
 
             if(char === ":"){
                 tokens.push({
-                    type: TokenType.SEMICOLON,
+                    type: TokenType.COLON,
                     value: ":"
                 })
                 this.position++;
@@ -109,28 +117,12 @@ export class Lexer {
                     value+= this.currentChar();
                     this.position++;
                 }
-
+                this.position++; 
                 tokens.push({
                     type: TokenType.STRING,
                     value: value
                 })
-                this.position++;
-                continue;
-            }
 
-            if(char === '"') {
-                this.position++;
-                let value = "";
-                while(this.position < this.input.length && this.currentChar() !== '"') {
-                    value+= this.currentChar();
-                    this.position++;
-                }
-
-                tokens.push({
-                    type: TokenType.STRING,
-                    value: value
-                })
-                this.position++;
                 continue;
             }
 
@@ -145,11 +137,45 @@ export class Lexer {
                     type: TokenType.NUMBER,
                     value: value
                 })
-                this.position++;
+
                 continue;
             }
 
+            if(/[a-zA-Z]/.test(char)) {
+                let value = "";
+
+                while(this.position < this.input.length &&/[a-zA-Z]/.test(this.currentChar())) {
+                    value += this.currentChar();
+                    this.position++;
+                }
+
+                if(value === "model") {
+                    tokens.push({
+                        type: TokenType.MODEL,
+                        value
+                    })
+                } else if(["Int", "String", "Boolean", "DateTime"].includes(value)) {
+                    tokens.push({
+                        type: TokenType.TYPE,
+                        value
+                    })
+                } else {
+                    tokens.push({
+                        type: TokenType.IDENTIFIER,
+                        value
+                    })
+                }
+
+                continue;
+            }
+
+            throw new Error(`Unexpected character: ${char}`)
         }
+        
+        tokens.push({
+            type: TokenType.EOF,
+            value: "",
+        })
 
         return tokens;
     }

@@ -13,7 +13,7 @@ export enum TokenType {
     RPAREN="RPAREN",
     OPTIONAL="OPTIONAL",
     COMMA="COMMA",
-    SEMICOLON="SEMICOLON",
+    COLON="COLON",
     EOF = "EOF",
 }
 
